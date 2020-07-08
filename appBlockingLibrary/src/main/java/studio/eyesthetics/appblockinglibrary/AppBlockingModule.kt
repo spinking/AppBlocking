@@ -26,8 +26,7 @@ class AppBlockingModule {
         this.endPoint = endPoint
     }
 
-    fun blockingRequest(activity: Activity, useCase: Class<*>) {
-        val type = useCase.kotlin.javaObjectType
+    fun blockingRequest(activity: Activity/*, useCase: Class<*>*/) {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -41,7 +40,7 @@ class AppBlockingModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()
-                .create(useCase) as ApiBlocking
+                .create(ApiBlocking::class.java) as ApiBlocking
 
         val disposable =
             apiBlocking.blockingState()
