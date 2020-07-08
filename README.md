@@ -6,7 +6,7 @@ Android library for protecting the vendor when publishing the application in the
 
 Step 1. Add the JitPack repository to your build file. Add it in your root build.gradle at the end of repositories:
 
-```xml
+```groovy
 	allprojects {
 		repositories {
 			...
@@ -17,7 +17,7 @@ Step 1. Add the JitPack repository to your build file. Add it in your root build
 
 Step 2. Add the dependency
 
-```java
+```groovy
 	dependencies {
 	        implementation 'com.github.spinking:AppBlocking:0.1.7'
 	}
