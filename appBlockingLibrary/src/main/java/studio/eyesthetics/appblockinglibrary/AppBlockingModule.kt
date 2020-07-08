@@ -20,34 +20,41 @@ class AppBlockingModule {
 
     var compositeDisposable = CompositeDisposable()
 
-    fun blockingRequest(activity: Activity, service: Class<*>?) {
-        Log.d("LOG_TAG", "blockingRequest")
+    private var endPoint = "https://google.com"
+
+    fun setEndPoint(endPoint: String) {
+        this.endPoint = endPoint
+    }
+
+    fun blockingRequest(activity: Activity, useCase: Class<*>) {
+        val type = useCase.kotlin.javaObjectType
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val okHttpClient =
             OkHttpClient.Builder().addInterceptor(interceptor).build()
+
         val apiBlocking =
-            Retrofit.Builder().baseUrl("https://google.com")
+            Retrofit.Builder().baseUrl(endPoint)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).client(okHttpClient).build()
-                .create(
-                    ApiBlocking::class.java
-                ) as ApiBlocking
-        Log.d("LOG_TAG", "ApiBlocking setContentView + sleep")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build()
+                .create(useCase) as ApiBlocking
+
         val disposable =
-            apiBlocking.blockingState
+            apiBlocking.blockingState()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { complete: Boolean? ->
+                    {
                         Log.d(
                             "LOG_TAG",
                             "message not blocking"
                         )
                     }
-                ) { error: Throwable? ->
+                ) {
                     Log.d("LOG_TAG", "message error + set content view + stop service")
                     activity.setContentView(R.layout.blocking_layout)
                     stopServices(activity)
@@ -79,7 +86,7 @@ class AppBlockingModule {
     }
 
     interface ApiBlocking {
-        @get:GET("/block")
-        val blockingState: Observable<Boolean>
+        @GET
+        fun blockingState() : Observable<Boolean>
     }
 }
