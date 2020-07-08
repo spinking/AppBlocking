@@ -17,7 +17,7 @@ Step 1. Add the JitPack repository to your build file. Add it in your root build
 
 Step 2. Add the dependency
 
-```groovy 
+```java
 	dependencies {
 	        implementation 'com.github.spinking:AppBlocking:0.1.7'
 	}
