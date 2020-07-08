@@ -1,2 +1,3 @@
+include ':appBlockingLibrary'
 include ':app'
 rootProject.name = "AppBlockingExample"

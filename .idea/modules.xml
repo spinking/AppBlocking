@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AppBlockingExample.iml" filepath="$PROJECT_DIR$/.idea/modules/AppBlockingExample.iml" group="AppBlockingExample" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="AppBlockingExample/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/appBlockingLibrary/appBlockingLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/appBlockingLibrary/appBlockingLibrary.iml" group="AppBlockingExample/appBlockingLibrary" />
     </modules>
   </component>
 </project>
