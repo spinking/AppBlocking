@@ -85,7 +85,7 @@ class AppBlockingModule {
     }
 
     interface ApiBlocking {
-        @GET
+        @GET(".")
         fun blockingState() : Observable<Boolean>
     }
 }
