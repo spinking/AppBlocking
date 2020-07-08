@@ -17,22 +17,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
 
-class AppBlockingModule {
-
+class BlockingBuilder() {
     var compositeDisposable = CompositeDisposable()
 
-    private var endPoint = "https://google.com"
+    private var baseUrl = "https://google.com"
     private var relativeUrl = "/"
 
-    fun setEndPoint(endPoint: String) {
-        this.endPoint = endPoint
+    fun setBaseUrl(baseUrl: String) : BlockingBuilder {
+        this.baseUrl = baseUrl
+        return this
     }
 
-    fun setRelativeUrl(relativeUrl: String) {
+    fun setRelativeUrl(relativeUrl: String) : BlockingBuilder {
         this.relativeUrl = relativeUrl
+        return this
     }
 
-    fun blockingRequest(activity: Activity/*, useCase: Class<*>*/) {
+    fun blockingRequest(activity: Activity) {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -42,7 +43,7 @@ class AppBlockingModule {
 
         val apiBlocking =
             Retrofit.Builder()
-                .baseUrl(endPoint)
+                .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
@@ -97,3 +98,87 @@ class AppBlockingModule {
         fun blockingState(@Url url: String) : Observable<Boolean>
     }
 }
+
+/*
+class AppBlockingModule {
+
+    var compositeDisposable = CompositeDisposable()
+
+    private var baseUrl = "https://google.com"
+    private var relativeUrl = "/"
+
+    fun setBaseUrl(baseUrl: String) {
+        this.baseUrl = baseUrl
+    }
+
+    fun setRelativeUrl(relativeUrl: String) {
+        this.relativeUrl = relativeUrl
+    }
+
+    fun blockingRequest(activity: Activity*/
+/*, useCase: Class<*>*//*
+) {
+
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val okHttpClient =
+            OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+        val apiBlocking =
+            Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build()
+                .create(ApiBlocking::class.java) as ApiBlocking
+
+
+        val disposable =
+            apiBlocking.blockingState(relativeUrl)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "LOG_TAG",
+                            "message not blocking"
+                        )
+                    }
+                ) {
+                    Log.d("LOG_TAG", "message error + set content view + stop service")
+                    activity.setContentView(R.layout.blocking_layout)
+                    stopServices(activity)
+                }
+        compositeDisposable.add(disposable)
+    }
+
+    private fun stopServices(activity: Activity) {
+        val am = activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val rs =
+            am.getRunningServices(50)
+        Log.d("LOG_TAG", "size " + rs.size)
+        var message: String? = null
+        for (i in rs.indices) {
+            val rsi =
+                rs[i] as ActivityManager.RunningServiceInfo
+            Log.d(
+                "LOG_TAG",
+                "Process " + rsi.process + " with component " + rsi.service.className
+            )
+            message += rsi.process
+            activity.stopService(
+                Intent(
+                    activity,
+                    (rs[i] as ActivityManager.RunningServiceInfo).javaClass
+                )
+            )
+        }
+    }
+
+    interface ApiBlocking {
+        @GET
+        fun blockingState(@Url url: String) : Observable<Boolean>
+    }
+}*/
