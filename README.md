@@ -35,4 +35,4 @@ BlockingBuilder()                                           // Use builder to co
             
 ## License
 
-AppBlocking is distributed under the MIT license. See [LICENSE](https://github.com/spinking/AppBlocking/LICENSE.md) for details.
+AppBlocking is distributed under the MIT license. See [LICENSE](https://github.com/spinking/AppBlocking/blob/master/LICENSE.md) for details.
