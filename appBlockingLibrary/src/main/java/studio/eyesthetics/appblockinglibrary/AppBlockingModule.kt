@@ -15,15 +15,21 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Url
 
 class AppBlockingModule {
 
     var compositeDisposable = CompositeDisposable()
 
     private var endPoint = "https://google.com"
+    private var relativeUrl = "/"
 
     fun setEndPoint(endPoint: String) {
         this.endPoint = endPoint
+    }
+
+    fun setRelativeUrl(relativeUrl: String) {
+        this.relativeUrl = relativeUrl
     }
 
     fun blockingRequest(activity: Activity/*, useCase: Class<*>*/) {
@@ -35,15 +41,17 @@ class AppBlockingModule {
             OkHttpClient.Builder().addInterceptor(interceptor).build()
 
         val apiBlocking =
-            Retrofit.Builder().baseUrl(endPoint)
+            Retrofit.Builder()
+                .baseUrl(endPoint)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()
                 .create(ApiBlocking::class.java) as ApiBlocking
 
+
         val disposable =
-            apiBlocking.blockingState()
+            apiBlocking.blockingState(relativeUrl)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -85,7 +93,7 @@ class AppBlockingModule {
     }
 
     interface ApiBlocking {
-        @GET("/")
-        fun blockingState() : Observable<Boolean>
+        @GET
+        fun blockingState(@Url url: String) : Observable<Boolean>
     }
 }
