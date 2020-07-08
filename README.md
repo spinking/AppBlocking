@@ -6,7 +6,7 @@ Android library for protecting the vendor when publishing the application in the
 
 Step 1. Add the JitPack repository to your build file. Add it in your root build.gradle at the end of repositories:
 
-```groovy
+```xml
 	allprojects {
 		repositories {
 			...
