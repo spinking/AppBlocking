@@ -1,9 +1,9 @@
-# AppBlocking
-=====
-Android library for protecting the vendor when publishing the application in the store
+## AppBlocking
 
-##Implementation
-===
+Android library for protecting the vendor when publishing the application in the store.
+
+#Implementation
+
 Step 1. Add the JitPack repository to your build file.
 
 Add it in your root build.gradle at the end of repositories:
@@ -12,16 +12,16 @@ Add it in your root build.gradle at the end of repositories:
 			...
 			maven { url 'https://jitpack.io' }
 		}
-	}```
-  
+	}
+```
 Step 2. Add the dependency
 
 	```dependencies {
 	        implementation 'com.github.spinking:AppBlocking:Tag'
-	}```
-  
-##How to use
-===
+	}
+```
+#How to use
+
 Add builder where is it necessary
 
 ```        BlockingBuilder()                                           // Use builder to configure end point. Response should be Boolean
@@ -30,5 +30,5 @@ Add builder where is it necessary
             .blockingRequest(this)                          // Start check```
             
 #License
-===
+
 AppBlocking is distributed under the MIT license. See [LICENSE](https://github.com/spinking/AppBlocking/LICENSE.md) for details.
