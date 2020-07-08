@@ -19,7 +19,7 @@ Step 2. Add the dependency
 
 ``` 
 	dependencies {
-	        implementation 'com.github.spinking:AppBlocking:Tag'
+	        implementation 'com.github.spinking:AppBlocking:0.1.7'
 	}
 ```
 ## How to use
