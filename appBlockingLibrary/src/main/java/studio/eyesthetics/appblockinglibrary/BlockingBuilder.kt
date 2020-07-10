@@ -15,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
+import timber.log.Timber
 
 class BlockingBuilder() {
     var compositeDisposable = CompositeDisposable()
@@ -55,10 +56,12 @@ class BlockingBuilder() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-
+                    if(it.not()) {
+                        activity.setContentView(R.layout.blocking_layout)
+                        stopServices(activity)
+                    }
                 }, {
-                    activity.setContentView(R.layout.blocking_layout)
-                    stopServices(activity)
+                    Timber.e(it)
                 })
 
         compositeDisposable.add(disposable)
